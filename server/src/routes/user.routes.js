@@ -1,0 +1,11 @@
+const r = require('express').Router();
+const c = require('../controllers/user.controller');
+const { protect } = require('../middlewares/auth');
+const { requireRole } = require('../middlewares/role');
+const upload = require('../middlewares/upload');
+r.get('/', protect, c.list);
+r.get('/:id', protect, c.get);
+r.patch('/me', protect, c.updateMe);
+r.post('/me/avatar', protect, upload.single('avatar'), c.uploadAvatar);
+r.delete('/:id', protect, requireRole('admin'), c.remove);
+module.exports = r;

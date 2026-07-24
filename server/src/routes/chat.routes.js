@@ -1,0 +1,13 @@
+const r = require('express').Router();
+const { body } = require('express-validator');
+const v = require('../middlewares/validate');
+const c = require('../controllers/chat.controller');
+const { protect } = require('../middlewares/auth');
+const upload = require('../middlewares/upload');
+r.get('/channels', protect, c.listChannels);
+r.post('/channels', protect, body('name').isString(), v, c.createChannel);
+r.post('/dm/:userId', protect, c.openDM);
+r.get('/channels/:channelId/messages', protect, c.listMessages);
+r.post('/channels/:channelId/messages', protect, upload.array('files', 5), c.sendMessage);
+r.post('/messages/:id/react', protect, body('emoji').isString(), v, c.react);
+module.exports = r;

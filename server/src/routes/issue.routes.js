@@ -1,0 +1,14 @@
+const r = require('express').Router();
+const { body } = require('express-validator');
+const v = require('../middlewares/validate');
+const c = require('../controllers/issue.controller');
+const { protect } = require('../middlewares/auth');
+const upload = require('../middlewares/upload');
+r.get('/', protect, c.list);
+r.post('/', protect, body('title').isString(), body('project').isMongoId(), v, c.create);
+r.get('/:id', protect, c.get);
+r.patch('/:id', protect, c.update);
+r.delete('/:id', protect, c.remove);
+r.post('/:id/kanban', protect, body('status').isString(), v, c.kanbanMove);
+r.post('/:id/attachments', protect, upload.array('files', 10), c.attach);
+module.exports = r;

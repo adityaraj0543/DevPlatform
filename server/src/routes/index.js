@@ -1,0 +1,14 @@
+const router = require('express').Router();
+router.use('/auth', require('./auth.routes'));
+router.use('/users', require('./user.routes'));
+router.use('/projects', require('./project.routes'));
+router.use('/repositories', require('./repository.routes'));
+router.use('/issues', require('./issue.routes'));
+router.use('/comments', require('./comment.routes'));
+router.use('/chat', require('./chat.routes'));
+router.use('/notifications', require('./notification.routes'));
+router.use('/activity', require('./activity.routes'));
+router.use('/search', require('./search.routes'));
+router.use('/admin', require('./admin.routes'));
+router.use('/uploads', require('./upload.routes'));
+module.exports = router;

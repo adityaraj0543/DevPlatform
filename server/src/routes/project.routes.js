@@ -1,0 +1,13 @@
+const r = require('express').Router();
+const { body } = require('express-validator');
+const c = require('../controllers/project.controller');
+const { protect, optional } = require('../middlewares/auth');
+const v = require('../middlewares/validate');
+r.get('/', optional, c.list);
+r.post('/', protect, body('name').isString().isLength({ min: 2, max: 120 }), v, c.create);
+r.get('/:id', optional, c.get);
+r.patch('/:id', protect, c.update);
+r.delete('/:id', protect, c.remove);
+r.post('/:id/members', protect, body('userId').isMongoId(), v, c.addMember);
+r.delete('/:id/members/:userId', protect, c.removeMember);
+module.exports = r;

@@ -1,0 +1,28 @@
+version: '3.9'
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    ports: ["27017:27017"]
+    volumes: ["mongo_data:/data/db"]
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports: ["6379:6379"]
+  server:
+    build: ./server
+    restart: unless-stopped
+    env_file: ./server/.env
+    depends_on: [mongo, redis]
+    ports: ["5000:5000"]
+    environment:
+      MONGO_URI: mongodb://mongo:27017/devplatform
+      REDIS_URL: redis://redis:6379
+      CLIENT_URL: http://localhost:8080
+  client:
+    build: ./client
+    restart: unless-stopped
+    depends_on: [server]
+    ports: ["8080:80"]
+volumes:
+  mongo_data:
